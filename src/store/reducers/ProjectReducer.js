@@ -13,7 +13,7 @@ import {
     project: {},
     projectList: [],
     errorMessage: "",
-    projectListLength: null,
+    pagination : {}
   };
   
   export function ProjectReducer(state = initialState, action) {
@@ -21,8 +21,8 @@ import {
       case PROJECT_LIST_SUCCESS_ACTION:
         return {
           ...state,
-          projectList: action.payload.data,
-          projectListLength: action.payload.length,
+          projectList: action.payload.projects,
+          pagination: action.payload.pagination,
         };
       case PROJECT_LIST_FAILED_ACTION:
         return {

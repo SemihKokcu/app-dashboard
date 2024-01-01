@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getAllProductAction,
-  createProductAction,
-  deleteProductAction,
-  updateProductAction,
-} from "../../store/actions/ProductAcitons";
-import { getAllCategoriesAction } from "../../store/actions/CateogryActions";
+  getAllProjectAction,
+  createProjectAction,
+  deleteProjectAction,
+  updateProjectAction,
+} from "../../store/actions/ProjectActions";
 import {
   Badge,
   Card,
@@ -24,78 +23,75 @@ import {
   Button,
   Col,
 } from "reactstrap";
-import AddProductModal from "./AddProductModal";
-import EditProductModal from "./EditProductModal";
+import AddProjectModal from "./AddProjectModal";
+import EditProjectModal from "./EditProjectModal";
 import ImageModal from "../../components/Tables/ImageViewModal";
 import GenericPagination from "components/Tables/GenericPagination";
 import DeleteConfirmationModal from "components/Tables/DeleteConfirmationModal";
-import ProductHeader from "./ProductHeader";
+import ProjectHeader from "./ProjectHeader";
 
-const ProductList = () => {
+const ProjectList = () => {
   const dispatch = useDispatch();
-  const { productList, pagination } = useSelector((state) => state.products);
-  const { categoryList } = useSelector((state) => state.categories);
+  const { projectList, pagination } = useSelector((state) => state.project);
   useEffect(() => {
-    dispatch(getAllProductAction());
-    dispatch(getAllCategoriesAction());
+    dispatch(getAllProjectAction());
   }, [dispatch]);
 
   const [imageModal, setImageModal] = useState(false);
-  const [selectedProductImage, setSelectedProductImage] = useState(null);
-  const [editProductModal, setEditProductModal] = useState(false);
-  const [selectedProductForEdit, setSelectedProductForEdit] = useState(null);
+  const [selectedProjectImage, setSelectedProjectImage] = useState(null);
+  const [editProjectModal, setEditProjectModal] = useState(false);
+  const [selectedProjectForEdit, setSelectedProjectForEdit] = useState(null);
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [addProductModal, setAddProductModal] = useState(false);
+  const [addProjectModal, setAddProjectModal] = useState(false);
 
-  const toogleAddProductModal = () => {
-    setAddProductModal(!addProductModal);
+  const toogleAddProjectModal = () => {
+    setAddProjectModal(!addProjectModal);
   };
-  const toggleEditProductModal = () => {
-    setEditProductModal(!editProductModal);
+  const toggleEditProjectModal = () => {
+    setEditProjectModal(!editProjectModal);
   };
-  const openEditModal = (product) => {
-    setSelectedProductForEdit(product);
-    toggleEditProductModal();
+  const openEditModal = (project) => {
+    setSelectedProjectForEdit(project);
+    toggleEditProjectModal();
   };
-  const toggleImageModal = (product) => {
-    setSelectedProductImage(product);
+  const toggleImageModal = (project) => {
+    console.log(project);
+    setSelectedProjectImage(project);
     setImageModal(!imageModal);
   };
   const toogleImageViewModal = () => {
-    setSelectedProductImage(null);
+    setSelectedProjectImage(null);
     setImageModal(false);
   };
   const toggleDeleteConfirmationModal = () => {
     setDeleteConfirmationModal(!deleteConfirmationModal);
   };
   const handleDelete = (id) => {
-    dispatch(deleteProductAction(id));
+    dispatch(deleteProjectAction(id));
     toggleDeleteConfirmationModal();
   };
-  const openDeleteConfirmationModal = (product) => {
-    setItemToDelete(product);
+  const openDeleteConfirmationModal = (project) => {
+    setItemToDelete(project);
     toggleDeleteConfirmationModal();
   };
-  const renderAddProductModal = () => (
-    <AddProductModal
-      isOpen={addProductModal}
-      toggleAddProductModal={toogleAddProductModal}
-      categoryList={categoryList}
-      dispatchAddProduct={(formData) => {
-        dispatch(createProductAction(formData));
+  const renderAddProjectModal = () => (
+    <AddProjectModal
+      isOpen={addProjectModal}
+      toggleAddProjectModal={toogleAddProjectModal}
+      dispatchAddProject={(formData) => {
+        dispatch(createProjectAction(formData));
       }}
     />
   );
 
-  const renderEditProductModal = () => (
-    <EditProductModal
-      isOpen={editProductModal}
-      toggleEditProductModal={toggleEditProductModal}
-      categoryList={categoryList}
-      selectedProductForEdit={selectedProductForEdit}
-      dispatchUpdateProduct={(id, formData) =>
-        dispatch(updateProductAction(id, formData))
+  const renderEditProjectModal = () => (
+    <EditProjectModal
+      isOpen={editProjectModal}
+      toggleEditProjectModal={toggleEditProjectModal}
+      selectedProjectForEdit={selectedProjectForEdit}
+      dispatchUpdateProject={(id, formData) =>
+        dispatch(updateProjectAction(id, formData))
       }
     />
   );
@@ -107,13 +103,13 @@ const ProductList = () => {
       itemName={itemToDelete?.name}
     />
   );
-  const renderProducts = () => {
+  const renderProjects = () => {
     return (
       <>
-        {productList ? (
+        {projectList ? (
           <>
-            {productList.map((product) => (
-              <tr key={product._id}>
+            {projectList.map((project) => (
+              <tr key={project._id}>
                 <th scope="row">
                   <Media className="align-items-center">
                     <a
@@ -121,7 +117,7 @@ const ProductList = () => {
                       href="#pablo"
                       onClick={(e) => {
                         e.preventDefault();
-                        toggleImageModal(product);
+                        toggleImageModal(project);
                       }}
                     >
                       <div
@@ -134,7 +130,7 @@ const ProductList = () => {
                       >
                         <img
                           alt="..."
-                          src={`${process.env.REACT_APP_IMAGE_URL}${product.imageUrls[0]}`}
+                          src={`${process.env.REACT_APP_IMAGE_URL}${project.imageUrls[0]}`}
                           className="img-fluid"
                           style={{
                             width: "100%",
@@ -146,23 +142,12 @@ const ProductList = () => {
                     </a>
 
                     <Media className="mx-2">
-                      <span className="mb-0  text-sm">{product.name}</span>
+                      <span className="mb-0  text-sm">{project.name}</span>
                     </Media>
                   </Media>
                 </th>
-                <td>{product.stock} Adet</td>
-                <td>{product.price}₺</td>
-                <td>{product.categoryId.name}</td>
-                <td>
-                  <Badge color="" className="badge-dot mr-4">
-                    <i
-                      className={`bg-${
-                        product.isActive ? "success" : "warning"
-                      }`}
-                    />
-                    {product.isActive ? "active" : "inactive"}
-                  </Badge>
-                </td>
+                <td>{project.author}</td>
+                <td>{project.status}</td>
                 <td className="text-center">
                   <UncontrolledDropdown>
                     <DropdownToggle
@@ -180,7 +165,7 @@ const ProductList = () => {
                         href="#pablo"
                         onClick={(e) => {
                           e.preventDefault();
-                          openEditModal(product);
+                          openEditModal(project);
                         }}
                       >
                         <Badge color="" className="badge-dot mr-4">
@@ -192,7 +177,7 @@ const ProductList = () => {
                         href="#pablo"
                         onClick={(e) => {
                           e.preventDefault();
-                          openDeleteConfirmationModal(product);
+                          openDeleteConfirmationModal(project);
                         }}
                       >
                         <Badge color="" className="badge-dot mr-4">
@@ -207,7 +192,7 @@ const ProductList = () => {
             ))}
           </>
         ) : (
-          "Ürünler Getirilemedi"
+          "Projeler Getirilemedi"
         )}
       </>
     );
@@ -216,7 +201,7 @@ const ProductList = () => {
     <ImageModal
       isOpen={imageModal}
       toggle={toogleImageViewModal}
-      selectedContent={selectedProductImage}
+      selectedContent={selectedProjectImage}
     />
   );
   const renderPagination = () => (
@@ -225,12 +210,12 @@ const ProductList = () => {
       currentPage={pagination?.currentPage}
       isPreviousDisabled={pagination?.currentPage === 1}
       isNextDisabled={pagination?.currentPage === pagination?.totalPages}
-      onPageChange={(page) => dispatch(getAllProductAction(page))}
+      onPageChange={(page) => dispatch(getAllProjectAction(page))}
     />
   );
   return (
     <>
-      <ProductHeader />
+      <ProjectHeader />
       <Container className="mt--7" fluid>
         <Row>
           <div className="col">
@@ -238,11 +223,11 @@ const ProductList = () => {
               <CardHeader className="border-0">
                 <Row>
                   <Col xl="10">
-                    <h3 className="mb-0">Ürün Listesi</h3>
+                    <h3 className="mb-0">Proje Listesi</h3>
                   </Col>
                   <Col xl="2">
-                    <Button color="success" onClick={toogleAddProductModal}>
-                      Ürün Ekle
+                    <Button color="success" onClick={toogleAddProjectModal}>
+                      Proje Ekle
                     </Button>
                   </Col>
                 </Row>
@@ -250,17 +235,15 @@ const ProductList = () => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Ürün Resmi</th>
-                    <th scope="col">Stok</th>
-                    <th scope="col">Fiyat</th>
-                    <th scope="col">Kategori</th>
-                    <th scope="col">Durum</th>
+                    <th scope="col">Proje Resmi</th>
+                    <th scope="col">Yapılan Kişi</th>
+                    <th scope="col">Durumu</th>
                     <th scope="col" className="text-center">
                       Aksiyonlar
                     </th>
                   </tr>
                 </thead>
-                <tbody>{renderProducts()}</tbody>
+                <tbody>{renderProjects()}</tbody>
               </Table>
               <CardFooter className="py-4">
                 <nav aria-label="...">
@@ -272,9 +255,9 @@ const ProductList = () => {
                   </Pagination>
                 </nav>
               </CardFooter>
-              {renderAddProductModal()}
+              {renderAddProjectModal()}
               {renderImageModal()}
-              {renderEditProductModal()}
+              {renderEditProjectModal()}
               {renderDeleteConfirmationModal()}
             </Card>
           </div>
@@ -283,4 +266,4 @@ const ProductList = () => {
     </>
   );
 };
-export default ProductList;
+export default ProjectList;

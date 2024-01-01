@@ -4,7 +4,7 @@ const ProjectService = () => ({
 
     async createProject(content) {  
         try {
-          const response = await client.post(`api/content/add`, content,{headers: {'Content-Type':'multipart/form-data'}});
+          const response = await client.post(`api/projects/add`, content,{headers: {'Content-Type':'multipart/form-data'}});
           return response;
         } catch (error) {
           console.log(error);
@@ -12,7 +12,7 @@ const ProjectService = () => ({
       },
     async getAllProjects(pageNumber, pageSize) {
         try {
-            const response = await client.get(`api/content/getAll?currentPage=${pageNumber}&perPage=${pageSize}`);
+            const response = await client.get(`api/projects/getAllPaginated?page=${pageNumber}&limit=${pageSize}`);
             return response;
         } catch (error) {
             console.log(error)
@@ -20,7 +20,7 @@ const ProjectService = () => ({
     },
     async deleteProject(contentId) {
         try {
-            const response = await client.delete(`api/content/delete/${contentId}`);
+            const response = await client.delete(`api/projects/delete/${contentId}`);
             return response;
         } catch (error) {
             console.log(error)
@@ -28,7 +28,7 @@ const ProjectService = () => ({
     },
     async getProject(contentId) {
         try {
-            const response = await client.get(`api/content/get/${contentId}`);
+            const response = await client.get(`api/projects/get/${contentId}`);
             return response;
         } catch (error) {
             console.log(error)
@@ -36,7 +36,7 @@ const ProjectService = () => ({
     },
     async updateProject(contentId,content) {
         try {
-            const response = await client.put(`api/content/update/${contentId}`,content,{headers: {'Content-Type':'multipart/form-data'}});
+            const response = await client.put(`api/projects/update/${contentId}`,content,{headers: {'Content-Type':'multipart/form-data'}});
             return response;
         } catch (error) {
             console.log(error)

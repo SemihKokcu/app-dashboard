@@ -6,6 +6,7 @@ import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
 import ProductList from  "views/Product/Product.jsx"
+import ProjectList from "views/Project/Project";
 var routes = [
   {
     path: "/index",
@@ -15,10 +16,17 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/product-list",
+    path: "/products",
     name: "Product",
     icon: "ni ni-basket",
     component: <ProductList />,
+    layout: "/admin",
+  },
+  {
+    path: "/projects",
+    name: "Projeler",
+    icon: "ni ni-archive-2",
+    component: <ProjectList />,
     layout: "/admin",
   },
   {
