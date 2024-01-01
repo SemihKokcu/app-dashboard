@@ -12,7 +12,7 @@ import {PROJECT_ADD_SUCCESS_ACTION,
     from "../types/ProjectTypes";
 import swal from "sweetalert";
 
-export function getAllProjectAction(currentPage =1,perPage=5) {
+export function getAllProjectAction(currentPage =1,perPage=10) {
     return (dispatch) => {
         projectService.getAllProjects(currentPage,perPage).then((response)=>{
             console.log(response);

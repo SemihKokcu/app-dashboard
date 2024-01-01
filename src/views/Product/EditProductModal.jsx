@@ -25,7 +25,7 @@ const EditProductModal = ({
       descp: selectedProductForEdit?.descp,
       price: selectedProductForEdit?.price,
       stock: selectedProductForEdit?.stock,
-      categoryId: selectedProductForEdit?.categoryId._id,
+      categoryId: selectedProductForEdit?.categoryId?._id,
       isActive: selectedProductForEdit?.isActive,
     });
   }, [selectedProductForEdit]);
@@ -50,7 +50,7 @@ const EditProductModal = ({
       price: selectedProductForEdit ? selectedProductForEdit?.price : null,
       stock: selectedProductForEdit ? selectedProductForEdit?.stock : null,
       categoryId: selectedProductForEdit
-        ? selectedProductForEdit?.categoryId._id
+        ? selectedProductForEdit?.categoryId?._id
         : "",
       isActive: selectedProductForEdit
         ? selectedProductForEdit?.isActive

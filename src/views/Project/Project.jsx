@@ -44,6 +44,7 @@ const ProjectList = () => {
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [addProjectModal, setAddProjectModal] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
 
   const toogleAddProjectModal = () => {
     setAddProjectModal(!addProjectModal);
@@ -204,13 +205,24 @@ const ProjectList = () => {
       selectedContent={selectedProjectImage}
     />
   );
+  const handlePageChange = (page) => {
+    dispatch(getAllProjectAction(page, pageSize));
+  };
+
+  const handlePageSizeChange = (size) => {
+    setPageSize(size);
+    dispatch(getAllProjectAction(1, size));
+  };
   const renderPagination = () => (
     <GenericPagination
       totalPages={pagination?.totalPages}
       currentPage={pagination?.currentPage}
       isPreviousDisabled={pagination?.currentPage === 1}
       isNextDisabled={pagination?.currentPage === pagination?.totalPages}
-      onPageChange={(page) => dispatch(getAllProjectAction(page))}
+      onPageChange={handlePageChange}
+      onPageSizeChange={handlePageSizeChange}
+      pageSizeOptions={[5, 10, 20]}
+      pageSize={pageSize}
     />
   );
   return (

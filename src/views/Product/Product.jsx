@@ -47,7 +47,8 @@ const ProductList = () => {
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [addProductModal, setAddProductModal] = useState(false);
-
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [pageSize, setPageSize] = useState(10);
   const toogleAddProductModal = () => {
     setAddProductModal(!addProductModal);
   };
@@ -76,6 +77,9 @@ const ProductList = () => {
   const openDeleteConfirmationModal = (product) => {
     setItemToDelete(product);
     toggleDeleteConfirmationModal();
+  };
+  const handleSort = () => {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
   };
   const renderAddProductModal = () => (
     <AddProductModal
@@ -108,11 +112,20 @@ const ProductList = () => {
     />
   );
   const renderProducts = () => {
+    const sortedProducts = [...productList];
+
+    sortedProducts.sort((a, b) => {
+      if (sortOrder === "asc") {
+        return a.isActive - b.isActive;
+      } else {
+        return b.isActive - a.isActive;
+      }
+    });
     return (
       <>
-        {productList ? (
+        {sortedProducts.length > 0 ? (
           <>
-            {productList.map((product) => (
+            {sortedProducts.map((product) => (
               <tr key={product._id}>
                 <th scope="row">
                   <Media className="align-items-center">
@@ -152,7 +165,7 @@ const ProductList = () => {
                 </th>
                 <td>{product.stock} Adet</td>
                 <td>{product.price}₺</td>
-                <td>{product.categoryId.name}</td>
+                <td>{product.categoryId?.name}</td>
                 <td>
                   <Badge color="" className="badge-dot mr-4">
                     <i
@@ -219,13 +232,24 @@ const ProductList = () => {
       selectedContent={selectedProductImage}
     />
   );
+  const handlePageChange = (page) => {
+    dispatch(getAllProductAction(page, pageSize));
+  };
+
+  const handlePageSizeChange = (size) => {
+    setPageSize(size);
+    dispatch(getAllProductAction(1, size));
+  };
   const renderPagination = () => (
     <GenericPagination
       totalPages={pagination?.totalPages}
       currentPage={pagination?.currentPage}
       isPreviousDisabled={pagination?.currentPage === 1}
       isNextDisabled={pagination?.currentPage === pagination?.totalPages}
-      onPageChange={(page) => dispatch(getAllProductAction(page))}
+      onPageChange={handlePageChange}
+      onPageSizeChange={handlePageSizeChange}
+      pageSizeOptions={[5, 10, 20]}
+      pageSize={pageSize}
     />
   );
   return (
@@ -254,7 +278,15 @@ const ProductList = () => {
                     <th scope="col">Stok</th>
                     <th scope="col">Fiyat</th>
                     <th scope="col">Kategori</th>
-                    <th scope="col">Durum</th>
+                    <th
+                      scope="col"
+                      onClick={handleSort}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Durum
+                      {sortOrder === "asc" ? " ▲" : " ▼"}
+                    </th>
+
                     <th scope="col" className="text-center">
                       Aksiyonlar
                     </th>

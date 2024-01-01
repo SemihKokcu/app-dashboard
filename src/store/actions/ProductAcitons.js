@@ -12,7 +12,7 @@ import {PRODUCT_ADD_SUCCESS_ACTION,
     from "../types/ProductTypes";
 import swal from "sweetalert";
 
-export function getAllProductAction(page=1,limit=5) {
+export function getAllProductAction(page=1,limit=10) {
     return (dispatch) => {
         productService.getAllProductPaginated(page,limit).then((response)=>{
             console.log(response);

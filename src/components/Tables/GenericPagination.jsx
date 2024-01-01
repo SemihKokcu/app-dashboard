@@ -1,6 +1,5 @@
-// PaginationComponent.js
-import React from "react";
-import { PaginationItem, PaginationLink } from "reactstrap";
+import React, { useState } from "react";
+import { PaginationItem, PaginationLink, Input, Label, FormGroup } from "reactstrap";
 
 const GenericPagination = ({
   totalPages,
@@ -8,7 +7,27 @@ const GenericPagination = ({
   isPreviousDisabled,
   isNextDisabled,
   onPageChange,
+  onPageSizeChange,
+  pageSizeOptions,
+  pageSize,
 }) => {
+  const [inputPage, setInputPage] = useState(currentPage);
+
+  const handlePageInputChange = (e) => {
+    const value = e.target.value;
+    setInputPage(value);
+    onPageChange(parseInt(value, 10)); // Sayfa numarası anında değişecek
+  };
+
+  const handlePageSizeChange = (e) => {
+    const value = e.target.value;
+    onPageSizeChange(value);
+  };
+
+  const handleInputBlur = () => {
+    onPageChange(parseInt(inputPage, 10));
+  };
+
   const pages = [];
 
   if (totalPages <= 3) {
@@ -48,6 +67,35 @@ const GenericPagination = ({
 
   return (
     <>
+    <FormGroup className="ml-2 mr-2">
+        <Label for="pageNumber">Page</Label>
+        <Input
+          type="number"
+          id="pageNumber"
+          value={inputPage}
+          onChange={handlePageInputChange}
+          onBlur={handleInputBlur}
+          min={1}
+          max={totalPages}
+        />
+      </FormGroup>
+
+      {/* Select for Items Per Page */}
+      <FormGroup className="ml-2 mr-5">
+        <Label for="pageSize">Items per page</Label>
+        <Input
+          type="select"
+          id="pageSize"
+          value={pageSize}
+          onChange={handlePageSizeChange}
+        >
+          {pageSizeOptions.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </Input>
+      </FormGroup>
       <PaginationItem disabled={isPreviousDisabled}>
         <PaginationLink
           href="#pablo"
@@ -100,6 +148,9 @@ const GenericPagination = ({
           <span className="sr-only">Last</span>
         </PaginationLink>
       </PaginationItem>
+
+      {/* Input for Page Number */}
+      
     </>
   );
 };
