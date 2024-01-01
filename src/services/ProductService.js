@@ -4,7 +4,7 @@ const ProductService = () => ({
 
     async createProduct(product) {
         try {
-          const response = await client.post(`api/product/add`, product,{headers: {'Content-Type':'multipart/form-data'}});
+          const response = await client.post(`api/products/add`, product,{headers: {'Content-Type':'multipart/form-data'}});
           return response;
         } catch (error) {
           console.log(error);
@@ -20,7 +20,7 @@ const ProductService = () => ({
     },
     async deleteProduct(productId) {
         try {
-            const response = await client.delete(`api/product/delete/${productId}`);
+            const response = await client.delete(`api/products/delete/${productId}`);
             return response;
         } catch (error) {
             console.log(error)
@@ -44,7 +44,7 @@ const ProductService = () => ({
     },
     async updateProduct(productId,product) {
         try {
-            const response = await client.put(`api/product/update/${productId}`,product,{headers: {'Content-Type':'multipart/form-data'}});
+            const response = await client.put(`api/products/update/${productId}`,product,{headers: {'Content-Type':'multipart/form-data'}});
             return response;
         } catch (error) {
             console.log(error)

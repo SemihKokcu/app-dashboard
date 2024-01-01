@@ -1,6 +1,6 @@
 
 import React from "react";
-import { useLocation, Route, Routes, Navigate } from "react-router-dom";
+import { useLocation, Route, Routes } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
 // core components

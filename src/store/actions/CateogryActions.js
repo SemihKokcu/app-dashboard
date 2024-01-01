@@ -13,9 +13,9 @@ import {
     from "../types/CategoryTypes";
 import swal from "sweetalert";
 
-export function getAllCategoriesAction(currentPage=1,perPage=5) {
+export function getAllCategoriesAction() {
     return (dispatch) => {
-        categoryService.getAllCategories(currentPage,perPage).then((response)=>{
+        categoryService.getAllCategories().then((response)=>{
             console.log(response);
             dispatch(confirmedGetAllCategorysAction(response.data));
         })

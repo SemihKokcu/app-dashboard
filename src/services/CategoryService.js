@@ -10,9 +10,9 @@ const CategoryService = () => ({
           console.log(error);
         }
       },
-    async getAllCategories(pageNumber=0, pageSize=0) {
+    async getAllCategories() {
         try {
-            const response = await client.get(`api/category/getAll?currentPage=${pageNumber}&perPage=${pageSize}`);
+            const response = await client.get(`api/categories/getAll`);
             return response;
         } catch (error) {
             console.log(error)

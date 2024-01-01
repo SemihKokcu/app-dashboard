@@ -21,8 +21,7 @@ export function CategoryReducer(state = initialState, action) {
     case CATEGORY_LIST_SUCCESS_ACTION:
       return {
         ...state,
-        categoryList: action.payload.data,
-        categoryListLength: action.payload.length,
+        categoryList: action.payload,
       };
     case CATEGORY_LIST_FAILED_ACTION:
       return {

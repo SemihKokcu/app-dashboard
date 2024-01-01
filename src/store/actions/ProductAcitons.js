@@ -20,8 +20,13 @@ export function getAllProductAction(page=1,limit=5) {
             
         })
         .catch((error)=>{
-            console.log(error);
-            swal("Başarısız", "ürünler Getirilemedi", "error", { button: "Tamam!", });
+            console.log(error);swal({
+                title: "Başarısız",
+                text: "ürünler Getirilemedi",
+                icon: "error",
+                button: "Tamam!",
+                position: "top-end", // Set the position to top-right
+              });  swal("Başarısız", "ürünler Getirilemedi", "error", { button: "Tamam!", });
             dispatch(failedGetAllProductsAction(error.message));
 
         })
@@ -65,7 +70,13 @@ export function deleteProductAction(productId) {
 export function createProductAction(product) {
     return (dispatch) => {
         productService.createProduct(product).then((response)=>{
-            swal("Başarılı", "Ürün Eklendi", "success", { button: "Tamam!", });
+            swal({
+                title: "Başarılı",
+                text: "Ürün Eklendi",
+                icon: "success",
+                button: "Tamam!",
+                position: "top-end", 
+              });
             console.log(response);
             dispatch(confirmedAddProductsAction(response.data));
             dispatch(getAllProductAction());

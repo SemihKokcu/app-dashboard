@@ -13,7 +13,6 @@ const rootReducers = combineReducers({
     project:ProjectReducer,
     comments:CommentReducer,
     headers:HeaderReducer,
-    project:ProjectReducer,
     aboutUs:aboutUsReducer
 });
 
