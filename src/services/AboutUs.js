@@ -17,9 +17,9 @@ const AboutUsService = () => ({
       console.log(error);
     }
   },
-  async updateAboutUs(aboutUsContent) {
+  async updateAboutUs(aboutUsContent,id) {
     try {
-      const response = await client.put("api/aboutus/update", aboutUsContent);
+      const response = await client.put("api/aboutus/update/"+id, aboutUsContent);
       return response;
     } catch (error) {
       console.log(error);

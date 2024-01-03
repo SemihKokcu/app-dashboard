@@ -26,9 +26,9 @@ export const getAboutUs = () => async (dispatch) => {
   }
 };
 
-export const updateAboutUs = (aboutUsContent) => async (dispatch) => {
+export const updateAboutUs = (aboutUsContent,id) => async (dispatch) => {
   try {
-    const response = await aboutUsService.updateAboutUs(aboutUsContent);
+    const response = await aboutUsService.updateAboutUs(aboutUsContent,id);
     dispatch({ type: UPDATE_ABOUT_US, payload: response.data });
     swal("Başarılı", "Hakkında Güncellendi", "success", { button: "Tamam!", });
     dispatch(getAboutUs());

@@ -3,7 +3,7 @@
 import { CREATE_ABOUT_US, GET_ABOUT_US, UPDATE_ABOUT_US } from '../actions/AboutUsActions';
 
 const initialState = {
-  aboutUsData: null,
+  aboutUsData: [],
   loading: false,
   error: null, 
 };

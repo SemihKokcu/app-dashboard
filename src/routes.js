@@ -7,6 +7,7 @@ import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
 import ProductList from  "views/Product/Product.jsx"
 import ProjectList from "views/Project/Project";
+import AboutUs from "views/AboutUs/AboutUs";
 var routes = [
   {
     path: "/index",
@@ -17,7 +18,7 @@ var routes = [
   },
   {
     path: "/products",
-    name: "Product",
+    name: "Ürünler",
     icon: "ni ni-basket",
     component: <ProductList />,
     layout: "/admin",
@@ -27,6 +28,13 @@ var routes = [
     name: "Projeler",
     icon: "ni ni-archive-2",
     component: <ProjectList />,
+    layout: "/admin",
+  },
+  {
+    path: "/aboutus",
+    name: "Hakkımızda",
+    icon: "ni ni-circle-08",
+    component: <AboutUs />,
     layout: "/admin",
   },
   {
