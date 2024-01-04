@@ -18,7 +18,7 @@ const ImageModal = ({ isOpen, toggle, selectedContent }) => {
       </ModalHeader>
       <ModalBody>
         <Slider {...sliderSettings}>
-          {selectedContent?.imageUrls.map((imageUrl, index) => (
+          {selectedContent?.imageUrls &&selectedContent?.imageUrls.map((imageUrl, index) => (
             <div key={index}>
               <img
                 src={`${process.env.REACT_APP_IMAGE_URL}${imageUrl}`}
@@ -27,8 +27,21 @@ const ImageModal = ({ isOpen, toggle, selectedContent }) => {
               />
             </div>
           ))}
+          {selectedContent?.profileImage && (<>
+            <div>
+              <img
+                src={`${process.env.REACT_APP_IMAGE_URL}${selectedContent.profileImage}`}
+                alt={`Product`}
+                className="img-fluid mb-2"
+              />
+            </div>
+          </>) }
         </Slider>
-        <p className="mt-5">{selectedContent?.descp}</p>
+        <p className="mt-2">{selectedContent?.descp}</p>
+        <h3 className="mt-2">Rol Listesi</h3>
+        {selectedContent?.roles && selectedContent.roles?.map(role => (
+          <li className="mt-1">{role?.name}</li>
+        ))}
       </ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={toggle}>

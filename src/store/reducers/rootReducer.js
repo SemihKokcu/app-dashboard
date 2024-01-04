@@ -6,6 +6,8 @@ import { CommentReducer } from './CommentsReducer';
 import { HeaderReducer } from './HeaderReducer';
 
 import aboutUsReducer from './AboutUsReducer';
+import { UserReducer } from './UserReducer';
+import { RoleReducer } from './RoleReducer';
 
 const rootReducers = combineReducers({
     products:ProductReducer,
@@ -13,7 +15,9 @@ const rootReducers = combineReducers({
     project:ProjectReducer,
     comments:CommentReducer,
     headers:HeaderReducer,
-    aboutUs:aboutUsReducer
+    aboutUs:aboutUsReducer,
+    users: UserReducer,
+    roles:RoleReducer
 });
 
 export default rootReducers;

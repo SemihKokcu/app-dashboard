@@ -1,9 +1,8 @@
 import { useSelector } from "react-redux";
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 
-const ProjectHeader = () => {
-
-    const {pagination} = useSelector((state) => state.project);
+const UserHeader = () => {
+  const { pagination } = useSelector((state) => state.users);
   return (
     <>
       <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
@@ -20,7 +19,7 @@ const ProjectHeader = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Toplam Proje Sayısı
+                          Toplam Kullanıcı Sayısı
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
                           {pagination.totalCount}
@@ -50,9 +49,11 @@ const ProjectHeader = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Tamamlanan Proje Sayısı
+                          Email Onaylı Kullanıcı Sayısı
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">{pagination.totalCountCompletedProject}</span>
+                        <span className="h2 font-weight-bold mb-0">
+                          {pagination.emailVerifiedCount}
+                        </span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-green text-white rounded-circle shadow">
@@ -78,12 +79,44 @@ const ProjectHeader = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Devam Eden Proje Sayısı
+                          Telefon Onaylı Kullanıcı Sayısı
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">{pagination.totalCount - pagination.totalCountCompletedProject}</span>
+                        <span className="h2 font-weight-bold mb-0">
+                          {pagination.phoneVerifiedCount}
+                        </span>
                       </div>
                       <Col className="col-auto">
-                        <div className="icon icon-shape bg-red text-white rounded-circle shadow">
+                        <div className="icon icon-shape bg-green text-white rounded-circle shadow">
+                        <i className="fas fa-chart-pie" />
+                        </div>
+                      </Col>
+                    </Row>
+                    {/* <p className="mt-3 mb-0 text-muted text-sm">
+                      <span className="text-warning mr-2">
+                        <i className="fas fa-arrow-down" /> 1.10%
+                      </span>{" "}
+                      <span className="text-nowrap">Since yesterday</span>
+                    </p> */}
+                  </CardBody>
+                </Card>
+              </Col>
+              <Col lg="6" xl="3">
+                <Card className="card-stats mb-4 mb-xl-0">
+                  <CardBody>
+                    <Row>
+                      <div className="col">
+                        <CardTitle
+                          tag="h5"
+                          className="text-uppercase text-muted mb-0"
+                        >
+                         Two Factor Aktif Sayısı
+                        </CardTitle>
+                        <span className="h2 font-weight-bold mb-0">
+                          {pagination.twoFactorCount}
+                        </span>
+                      </div>
+                      <Col className="col-auto">
+                        <div className="icon icon-shape bg-green text-white rounded-circle shadow">
                         <i className="fas fa-chart-pie" />
                         </div>
                       </Col>
@@ -133,4 +166,4 @@ const ProjectHeader = () => {
   );
 };
 
-export default ProjectHeader;
+export default UserHeader;
