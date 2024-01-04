@@ -38,7 +38,7 @@ const ImageModal = ({ isOpen, toggle, selectedContent }) => {
           </>) }
         </Slider>
         <p className="mt-2">{selectedContent?.descp}</p>
-        <h3 className="mt-2">Rol Listesi</h3>
+       {selectedContent?.roles && ( <h3 className="mt-2">Rol Listesi</h3>)}
         {selectedContent?.roles && selectedContent.roles?.map(role => (
           <li className="mt-1">{role?.name}</li>
         ))}
