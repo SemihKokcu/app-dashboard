@@ -109,7 +109,7 @@ const UserList = () => {
       itemName={itemToDelete?.name}
     />
   );
-  const renderProjects = () => {
+  const renderUsers = () => {
     return (
       <>
         {userList ? (
@@ -295,7 +295,7 @@ const UserList = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody>{renderProjects()}</tbody>
+                <tbody>{renderUsers()}</tbody>
               </Table>
               <CardFooter className="py-4">
                 <nav aria-label="...">
