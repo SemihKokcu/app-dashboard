@@ -10,9 +10,17 @@ const UserService = () => ({
           console.log(error);
         }
       },
-    async getAllUsers(pageNumber, pageSize) {
+    async getAllPaginatedUsers(pageNumber, pageSize) {
         try {
             const response = await client.get(`api/users/getAllPaginated?page=${pageNumber}&limit=${pageSize}`);
+            return response;
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    async getallUsers() {
+        try {
+            const response = await client.get(`api/users/getAll`);
             return response;
         } catch (error) {
             console.log(error)

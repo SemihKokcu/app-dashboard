@@ -6,15 +6,31 @@ import {USER_ADD_SUCCESS_ACTION,
     USER_UPDATE_SUCCESS_ACTION,
     USER_UPDATE_FAILED_ACTION,
     USER_DELETE_SUCCESS_ACTION,
-    USER_DELETE_FAILED_ACTION
+    USER_DELETE_FAILED_ACTION,
+    USER_LIST_PAGINATED_SUCCESS_ACTION,
+    USER_LIST_PAGINATED_FAILED_ACTION
 
 } 
     from "../types/UserTypes";
 import swal from "sweetalert";
 
-export function getAllUserAction(currentPage =1,perPage=10) {
+export function getAllUserPaginatedAction(currentPage =1,perPage=10) {
     return (dispatch) => {
-        userService.getAllUsers(currentPage,perPage).then((response)=>{
+        userService.getAllPaginatedUsers(currentPage,perPage).then((response)=>{
+            console.log(response);
+            dispatch(confirmedGetAllPaginatedUsersAction(response.data));
+        })
+        .catch((error)=>{
+            console.log(error);
+            swal("Başarısız", "kullanıcılar Getirilemedi", "error", { button: "Tamam!", });
+            dispatch(failedGetAllPaginatedUsersAction(error.message));
+
+        })
+    }
+}
+export function getAllUserAction() {
+    return (dispatch) => {
+        userService.getallUsers().then((response)=>{
             console.log(response);
             dispatch(confirmedGetAllUsersAction(response.data));
         })
@@ -26,20 +42,19 @@ export function getAllUserAction(currentPage =1,perPage=10) {
         })
     }
 }
-
 export function updateUserAction(userId,user) {
     return (dispatch) => {
         userService.updateUser(userId,user).then((response)=>{
             swal("Başarılı", "User Güncellendi", "success", { button: "Tamam!", });
             console.log(response);
             dispatch(confirmedUpdateUsersAction(response.data));
-            dispatch(getAllUserAction())
+            dispatch(getAllUserPaginatedAction())
         })
         .catch((error)=>{
             console.log(error);
             swal("Başarısız", "Veri Getirilemedi", "error", { button: "Tamam!", });
             dispatch(failedUpdateUsersAction(error.message));
-            dispatch(getAllUserAction())
+            dispatch(getAllUserPaginatedAction())
         })
     }
 }
@@ -50,13 +65,13 @@ export function deleteUserAction(userId) {
             swal("Başarılı", "User Silindi", "success", { button: "Tamam!", });
             console.log(response);
             dispatch(confirmedDeleteUsersAction({userId:userId}));
-            dispatch(getAllUserAction())
+            dispatch(getAllUserPaginatedAction())
         })
         .catch((error)=>{
             console.log(error);
             swal("Başarısız", "User Silinemedi", "error", { button: "Tamam!", });
             dispatch(failedDeleteUsersAction(error.message));
-            dispatch(getAllUserAction())
+            dispatch(getAllUserPaginatedAction())
 
         })
     }
@@ -67,13 +82,13 @@ export function createUserAction(user) {
             swal("Başarılı", "User Eklendi", "success", { button: "Tamam!", });
             console.log(response);
             dispatch(confirmedAddUsersAction(response.data));
-            dispatch(getAllUserAction())
+            dispatch(getAllUserPaginatedAction())
         })
         .catch((error)=>{
             console.log(error);
             swal("Başarısız", "User Eklenemedi", "error", { button: "Tamam!", });
             dispatch(failedAddUsersAction(error.message));
-            dispatch(getAllUserAction())
+            dispatch(getAllUserPaginatedAction())
 
         })
     }
@@ -102,6 +117,19 @@ export const confirmedGetAllUsersAction = (data)=>{
 export const failedGetAllUsersAction = (data)=>{
     return {
         type: USER_LIST_FAILED_ACTION,
+        payload: data
+    }
+}
+export const confirmedGetAllPaginatedUsersAction = (data)=>{
+    return {
+        type: USER_LIST_PAGINATED_SUCCESS_ACTION,
+        payload: data
+    }
+}
+
+export const failedGetAllPaginatedUsersAction = (data)=>{
+    return {
+        type: USER_LIST_PAGINATED_FAILED_ACTION,
         payload: data
     }
 }

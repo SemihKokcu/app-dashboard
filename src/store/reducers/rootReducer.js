@@ -8,6 +8,7 @@ import { HeaderReducer } from './HeaderReducer';
 import aboutUsReducer from './AboutUsReducer';
 import { UserReducer } from './UserReducer';
 import { RoleReducer } from './RoleReducer';
+import { AddressReducer } from './AddressReducer';
 
 const rootReducers = combineReducers({
     products:ProductReducer,
@@ -17,7 +18,8 @@ const rootReducers = combineReducers({
     headers:HeaderReducer,
     aboutUs:aboutUsReducer,
     users: UserReducer,
-    roles:RoleReducer
+    roles:RoleReducer,
+    addresses:AddressReducer
 });
 
 export default rootReducers;

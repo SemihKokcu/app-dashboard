@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  createUserAction,
-  deleteUserAction,
-  getAllUserPaginatedAction,
-  updateUserAction,
+  getAllAddresssPaginatedActionAction,
+  createAddressAction,
+  deleteAddressAction,
+  updateAddressAction,
+} from "../../store/actions/AddressActions";
+import {
+  getAllUserAction,
 } from "../../store/actions/UserActions";
 import {
   Badge,
@@ -23,82 +26,72 @@ import {
   Button,
   Col,
 } from "reactstrap";
-import AddProjectModal from "./AddUserModal";
-import EditProjectModal from "./EditUserModal";
-import ImageModal from "../../components/Tables/ImageViewModal";
+import AddAddressModal from "./AddAddressModal";
+import EditAddressModal from "./EditAddressMdodal";
 import GenericPagination from "components/Tables/GenericPagination";
 import DeleteConfirmationModal from "components/Tables/DeleteConfirmationModal";
-import UserHeader from "./UserHeader";
-import { getAllRoleAction } from "store/actions/RoleActions";
+import AddressHeader from "./AddressHeader";
 
-const UserList = () => {
+const AddressList = () => {
   const dispatch = useDispatch();
-  const { userList, pagination } = useSelector((state) => state.users);
-  const { roleList } = useSelector((state) => state.roles);
+  const { addressList, pagination } = useSelector((state) => state.addresses);
+  const { userList } = useSelector((state) => state.users);
   useEffect(() => {
-    dispatch(getAllUserPaginatedAction());
-    dispatch(getAllRoleAction());
+    dispatch(getAllAddresssPaginatedActionAction());
+    dispatch(get)
   }, [dispatch]);
 
-  const [imageModal, setImageModal] = useState(false);
-  const [selectedUserImage, setSelectedUserImage] = useState(null);
-  const [editUserModal, setEdtiUserModal] = useState(false);
-  const [selectedUserForEdit, setSelectedUserForEdit] = useState(null);
+  const [editAddressModal, setEditAddressModal] = useState(false);
+  const [selectedAddressForEdit, setSelectedAddressForEdit] = useState(null);
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [addUserModal, setAddUserModal] = useState(false);
+  const [addAddressModal, setAddAddressModal] = useState(false);
+  const [sortOrder, setSortOrder] = useState("asc");
   const [pageSize, setPageSize] = useState(10);
-
-  const toogleAddProjectModal = () => {
-    setAddUserModal(!addUserModal);
+  const toogleAddAddressModal = () => {
+    setAddAddressModal(!addAddressModal);
   };
-  const toggleEditProjectModal = () => {
-    setEdtiUserModal(!editUserModal);
+  const toggleEditAddressModal = () => {
+    setEditAddressModal(!editAddressModal);
   };
-  const openEditModal = (user) => {
-    setSelectedUserForEdit(user);
-    toggleEditProjectModal();
-  };
-  const toggleImageModal = (user) => {
-    console.log(user);
-    setSelectedUserImage(user);
-    setImageModal(!imageModal);
-  };
-  const toogleImageViewModal = () => {
-    setSelectedUserImage(null);
-    setImageModal(false);
+  const openEditModal = (address) => {
+    setSelectedAddressForEdit(address);
+    toggleEditAddressModal();
   };
   const toggleDeleteConfirmationModal = () => {
     setDeleteConfirmationModal(!deleteConfirmationModal);
   };
   const handleDelete = (id) => {
-    dispatch(deleteUserAction(id));
+    dispatch(deleteAddressAction(id));
     toggleDeleteConfirmationModal();
   };
-  const openDeleteConfirmationModal = (user) => {
-    setItemToDelete(user);
+  const openDeleteConfirmationModal = (address) => {
+    setItemToDelete(address);
     toggleDeleteConfirmationModal();
   };
-  const renderAddProjectModal = () => (
-    <AddProjectModal
-      isOpen={addUserModal}
-      toggleAddUserModal={toogleAddProjectModal}
-      dispatchAddPUser={(formData) => {
-        dispatch(createUserAction(formData));
+  const handleSort = () => {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  };
+  const renderAddAddressModal = () => (
+    <AddAddressModal
+      isOpen={addAddressModal}
+      toggleAddAddressModal={toogleAddAddressModal}
+      userList={userList}
+      dispatchAddAddress={(formData) => {
+        dispatch(createAddressAction(formData));
       }}
-      roleList={roleList}
     />
   );
 
-  const renderEditProjectModal = () => (
-    <EditProjectModal
-      isOpen={editUserModal}
-      toggleEditUserModal={toggleEditProjectModal}
-      selectedUserForEdit={selectedUserForEdit}
-      dispatchUpdateUser={(id, formData) =>
-        dispatch(updateUserAction(id, formData))
+  const renderEditAddressModal = () => (
+    <EditAddressModal
+      isOpen={editAddressModal}
+      toggleEditAddressModal={toggleEditAddressModal}
+      userList={userList}
+      selectedAddressForEdit={selectedAddressForEdit}
+      dispatchUpdateAddress={(id, formData) =>
+        dispatch(updateAddressAction(id, formData))
       }
-      roleList={roleList}
     />
   );
   const renderDeleteConfirmationModal = () => (
@@ -109,13 +102,22 @@ const UserList = () => {
       itemName={itemToDelete?.name}
     />
   );
-  const renderUsers = () => {
+  const renderAddresss = () => {
+    const sortedAddresss = [...addressList];
+
+    sortedAddresss.sort((a, b) => {
+      if (sortOrder === "asc") {
+        return a.isActive - b.isActive;
+      } else {
+        return b.isActive - a.isActive;
+      }
+    });
     return (
       <>
-        {userList ? (
+        {sortedAddresss.length > 0 ? (
           <>
-            {userList.map((user) => (
-              <tr key={user._id}>
+            {sortedAddresss.map((address) => (
+              <tr key={address._id}>
                 <th scope="row">
                   <Media className="align-items-center">
                     <a
@@ -123,7 +125,7 @@ const UserList = () => {
                       href="#pablo"
                       onClick={(e) => {
                         e.preventDefault();
-                        toggleImageModal(user);
+                        toggleImageModal(address);
                       }}
                     >
                       <div
@@ -136,7 +138,7 @@ const UserList = () => {
                       >
                         <img
                           alt="..."
-                          src={`${process.env.REACT_APP_IMAGE_URL}${user.profileImage}`}
+                          src={`${process.env.REACT_APP_IMAGE_URL}${address.imageUrls[0]}`}
                           className="img-fluid"
                           style={{
                             width: "100%",
@@ -148,42 +150,21 @@ const UserList = () => {
                     </a>
 
                     <Media className="mx-2">
-                      <span className="mb-0  text-sm">
-                        {user.name + " " + user.surname}
-                      </span>
+                      <span className="mb-0  text-sm">{address.name}</span>
                     </Media>
                   </Media>
                 </th>
-                <td>{user.email}</td>                          
-                <td>{user.phoneNumber}</td>                          
-                <td className="text-center">
+                <td>{address.stock} Adet</td>
+                <td>{address.price}₺</td>
+                <td>{address.categoryId?.name}</td>
+                <td>
                   <Badge color="" className="badge-dot mr-4">
                     <i
                       className={`bg-${
-                        user.emailVerified ? "success" : "warning"
+                        address.isActive ? "success" : "warning"
                       }`}
                     />
-                    {/* {user.emailVerified ? "Onaylandı" : "Onaylanmadı"} */}
-                  </Badge>
-                </td>
-                <td className="text-center">
-                  <Badge color="" className="badge-dot mr-4">
-                    <i
-                      className={`bg-${
-                        user.phoneVerified ? "success" : "warning"
-                      }`}
-                    />
-                    {/* {user.phoneVerified ? "Onaylandı" : "Onaylanmadı"} */}
-                  </Badge>
-                </td>
-                <td className="text-center">
-                  <Badge color="" className="badge-dot mr-4">
-                    <i
-                      className={`bg-${
-                        user.twoFactor ? "success" : "warning"
-                      }`}
-                    />
-                    {/* {user.twoFactor ? "Onaylandı" : "Onaylanmadı"} */}
+                    {address.isActive ? "active" : "inactive"}
                   </Badge>
                 </td>
                 <td className="text-center">
@@ -203,7 +184,7 @@ const UserList = () => {
                         href="#pablo"
                         onClick={(e) => {
                           e.preventDefault();
-                          openEditModal(user);
+                          openEditModal(address);
                         }}
                       >
                         <Badge color="" className="badge-dot mr-4">
@@ -215,7 +196,7 @@ const UserList = () => {
                         href="#pablo"
                         onClick={(e) => {
                           e.preventDefault();
-                          openDeleteConfirmationModal(user);
+                          openDeleteConfirmationModal(address);
                         }}
                       >
                         <Badge color="" className="badge-dot mr-4">
@@ -230,25 +211,18 @@ const UserList = () => {
             ))}
           </>
         ) : (
-          "Projeler Getirilemedi"
+          "Ürünler Getirilemedi"
         )}
       </>
     );
   };
-  const renderImageModal = () => (
-    <ImageModal
-      isOpen={imageModal}
-      toggle={toogleImageViewModal}
-      selectedContent={selectedUserImage}
-    />
-  );
   const handlePageChange = (page) => {
-    dispatch(getAllUserPaginatedAction(page, pageSize));
+    dispatch(getAllAddressAction(page, pageSize));
   };
 
   const handlePageSizeChange = (size) => {
     setPageSize(size);
-    dispatch(getAllUserPaginatedAction(1, size));
+    dispatch(getAllAddressAction(1, size));
   };
   const renderPagination = () => (
     <GenericPagination
@@ -264,7 +238,7 @@ const UserList = () => {
   );
   return (
     <>
-      <UserHeader />
+      <AddressHeader />
       <Container className="mt--7" fluid>
         <Row>
           <div className="col">
@@ -272,11 +246,11 @@ const UserList = () => {
               <CardHeader className="border-0">
                 <Row>
                   <Col xl="10">
-                    <h3 className="mb-0">Kullanıcı Listesi</h3>
+                    <h3 className="mb-0">Ürün Listesi</h3>
                   </Col>
                   <Col xl="2">
-                    <Button color="success" onClick={toogleAddProjectModal}>
-                      Kullanıcı Ekle
+                    <Button color="success" onClick={toogleAddAddressModal}>
+                      Ürün Ekle
                     </Button>
                   </Col>
                 </Row>
@@ -284,18 +258,25 @@ const UserList = () => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Kullanıcı Resmi</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Telefon Numarası</th>
-                    <th scope="col">Email Onayı</th>
-                    <th scope="col">Telefon Onayı</th>
-                    <th scope="col">İki Aşamalı Doğrulama</th>
+                    <th scope="col">Ürün Resmi</th>
+                    <th scope="col">Stok</th>
+                    <th scope="col">Fiyat</th>
+                    <th scope="col">Kategori</th>
+                    <th
+                      scope="col"
+                      onClick={handleSort}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Durum
+                      {sortOrder === "asc" ? " ▲" : " ▼"}
+                    </th>
+
                     <th scope="col" className="text-center">
                       Aksiyonlar
                     </th>
                   </tr>
                 </thead>
-                <tbody>{renderUsers()}</tbody>
+                <tbody>{renderAddresss()}</tbody>
               </Table>
               <CardFooter className="py-4">
                 <nav aria-label="...">
@@ -307,9 +288,8 @@ const UserList = () => {
                   </Pagination>
                 </nav>
               </CardFooter>
-              {renderAddProjectModal()}
-              {renderImageModal()}
-              {renderEditProjectModal()}
+              {renderAddAddressModal()}
+              {renderEditAddressModal()}
               {renderDeleteConfirmationModal()}
             </Card>
           </div>
@@ -318,4 +298,4 @@ const UserList = () => {
     </>
   );
 };
-export default UserList;
+export default AddressList;

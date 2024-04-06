@@ -7,6 +7,8 @@ import {
     USER_UPDATE_FAILED_ACTION,
     USER_DELETE_FAILED_ACTION,
     USER_DELETE_SUCCESS_ACTION,
+    USER_LIST_PAGINATED_SUCCESS_ACTION,
+    USER_LIST_PAGINATED_FAILED_ACTION
   } from "../types/UserTypes";
   
   const initialState = {
@@ -21,14 +23,24 @@ import {
       case USER_LIST_SUCCESS_ACTION:
         return {
           ...state,
-          userList: action.payload.users,
-          pagination: action.payload.pagination,
+          userList: action.payload,
         };
       case USER_LIST_FAILED_ACTION:
         return {
           ...state,
           errorMessage: action.payload.error,
         };
+        case USER_LIST_PAGINATED_SUCCESS_ACTION:
+          return {
+            ...state,
+            userList: action.payload.users,
+            pagination: action.payload.pagination,
+          };
+        case USER_LIST_PAGINATED_FAILED_ACTION:
+          return {
+            ...state,
+            errorMessage: action.payload.error,
+          };
       case USER_ADD_SUCCESS_ACTION:
         return {
           ...state,
